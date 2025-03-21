@@ -21,6 +21,7 @@ const App = () => {
 
   const [searchTerm, setSearchTerm] =useState('');
   const [errorMessage,setErrorMessage]=useState('');
+  const [trendingErrorMessage,setTrendingErrorMessage]=useState('');
   const [moviesList, setMoviesList] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [isLoading,setIsLoading]=useState(false);
@@ -46,26 +47,23 @@ const App = () => {
         throw new Error('fetching movies failed');
       }
       const data = await response.json();
-      
+
       if(data.response==='False'){
         setErrorMessage(data.Error || 'Something went wrong!');
         setMoviesList([]);
         return
       }
       setMoviesList(data.results) || [];
-      
+
 
 
       if(query && data.results.length>0){
         updateSearchCount(query,data.results[0]);
       }
-      
-      
-     
     } catch (error) {
       console.error(`Error fetching movies: ${error}`);
       setErrorMessage('error fetching movies try again!!!');
-      
+
     }finally{
       setIsLoading(false);
     }
@@ -77,10 +75,10 @@ const App = () => {
       setTrendingMovies(movies);
       // console.log(movies)
       console.log(setTrendingMovies(movies));
-      
+
     } catch (error) {
       console.error(`Error loading trending movies: ${error}`);
-      
+      setTrendingErrorMessage('error loading trending movies try again!!!');
     }
   }
 
@@ -108,6 +106,11 @@ const App = () => {
         {trendingMovies.length > 0 && (
           <section className='trending'>
             <h2>Trending movies</h2>
+            { isLoading ?(
+            <Spinner />
+          ) : trendingErrorMessage ? (
+            <p className='text-red-500'>{trendingErrorMessage}</p>
+          ) :(
             <ul>
               {trendingMovies.map((movie,index) => (
                 <li key={movie.$id}>
@@ -116,17 +119,14 @@ const App = () => {
                 </li>
               ))}
 
-             
-
-               
-            
             </ul>
-       
+          )
+        }
           </section>
         )}
 
         <section className='all-movies '>
-          <h2>all movies</h2>
+          <h2>Popular</h2>
           { isLoading ?(
             <Spinner />
           ) : errorMessage ? (
