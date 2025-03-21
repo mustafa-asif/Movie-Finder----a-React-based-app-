@@ -3,7 +3,7 @@ import {useDebounce } from 'react-use'
 import Search from './Components/Search'
 import Spinner from './Components/Spinner'
 import Cards from './Components/Cards';
-import { updateSearchCount } from './Backend/appwrite';
+import { updateSearchCount ,getTrendingMovies } from './Backend/appwrite';
 
 const API_BASE_URL='https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -22,6 +22,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] =useState('');
   const [errorMessage,setErrorMessage]=useState('');
   const [moviesList, setMoviesList] = useState([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [isLoading,setIsLoading]=useState(false);
   const [debounceTerm,setDebounceTerm]=useState('');
 
@@ -52,6 +53,8 @@ const App = () => {
         return
       }
       setMoviesList(data.results) || [];
+      
+
 
       if(query && data.results.length>0){
         updateSearchCount(query,data.results[0]);
@@ -68,10 +71,28 @@ const App = () => {
     }
   }
 
+  const loadTrendingMovies=async()=>{
+    try {
+      const movies = await getTrendingMovies();
+      setTrendingMovies(movies);
+      // console.log(movies)
+      console.log(setTrendingMovies(movies));
+      
+    } catch (error) {
+      console.error(`Error loading trending movies: ${error}`);
+      
+    }
+  }
+
   useEffect(()=>{
     fetchMovies(debounceTerm);
   }
   ,[debounceTerm]);
+
+  // use effect for trending movies
+  useEffect(()=>{
+    loadTrendingMovies();
+  },[]);
 
   return (
     <main>
@@ -83,7 +104,28 @@ const App = () => {
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         </header>
 
-        <section className='all-movies'>
+        {/* trending section */}
+        {trendingMovies.length > 0 && (
+          <section className='trending'>
+            <h2>Trending movies</h2>
+            <ul>
+              {trendingMovies.map((movie,index) => (
+                <li key={movie.$id}>
+                  <p>{index+1}</p>
+                  <img src={movie.poster_url} alt={movie.searchTerm} />
+                </li>
+              ))}
+
+             
+
+               
+            
+            </ul>
+       
+          </section>
+        )}
+
+        <section className='all-movies '>
           <h2>all movies</h2>
           { isLoading ?(
             <Spinner />
