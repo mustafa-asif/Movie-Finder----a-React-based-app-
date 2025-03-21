@@ -33,7 +33,7 @@ export const updateSearchCount = async(searchTerm,movie)=>{
       await database.createDocument(Movies_DATABASE_ID,Movies_COLLECTION_ID,ID.unique(),{
         searchTerm,
         searchCount:1,
-        movieID:movie.id,
+        id:movie.id,
         poster_url:`https://image.tmdb.org/t/p/w500/${movie.poster_path}`
 
       })
@@ -44,4 +44,19 @@ export const updateSearchCount = async(searchTerm,movie)=>{
     
   }
 
+}
+
+
+export const getTrendingMovies = async() =>{
+  try {
+    const result = await database.listDocuments(Movies_DATABASE_ID, Movies_COLLECTION_ID, [
+      Query.limit(5),
+      Query.orderDesc('searchCount')
+    ]);
+    return result.documents;
+
+  } catch (error) {
+    console.error(`Error getting trending movies: ${error}`);
+    
+  }
 }
