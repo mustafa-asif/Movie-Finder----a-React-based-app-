@@ -49,16 +49,17 @@ A **React**-based web application that allows users to search for movies, discov
 
    
    git clone https://github.com/mustafa-asif/Movie-Finder----a-React-based-app-.git
+   
    cd Movie-Finder----a-React-based-app-
   
 
-2. **Install dependencies**
+3. **Install dependencies**
 
    
    npm install
    
 
-3. **Configure environment variables**
+4. **Configure environment variables**
 
    Create a .env file in the project root and add the following 
 
@@ -79,26 +80,10 @@ A **React**-based web application that allows users to search for movies, discov
 | VITE_APPWRITE_COLLECTION_ID| ID of the collection for search records             |
 
 
-## Project Structure
 
 
-Movie-Finder----a-React-based-app-
-├── src
-│   ├── Backend
-│   │   └── appwrite.js      # Appwrite client and functions
-│   ├── Components
-│   │   ├── Cards.jsx        # Movie card component
-│   │   ├── Search.jsx       # Search input component
-│   │   └── Spinner.jsx      # Loading spinner component
-│   ├── App.jsx              # Main application component
-│   ├── index.css            # Global styles
-│   └── main.jsx             # Entry point
-├── public
-│   └── index.html           # HTML template
-├── .env                     # Environment variables (not committed)
-├── package.json             # Project metadata & scripts
-├── tailwind.config.js       # Tailwind CSS configuration
-└── vite.config.js           # Vite configuration
+
+
 
 
 
